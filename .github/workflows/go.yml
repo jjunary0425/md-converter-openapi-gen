@@ -36,7 +36,7 @@ jobs:
     - name: init
       run: |
         cd openapi
-        go mod init ${{ github.event.repository.html_url }}
+        go mod init github.com/${{ github.event.repository.name }}/openapi
 
     - name: Commit and Push Changes
       run: |
