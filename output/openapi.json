@@ -64,6 +64,35 @@
           }
         }
       }
+    },
+    "/english": {
+      "post": {
+        "summary": "Create a new english markdown",
+        "operationId": "postEnglishMarkdown",
+        "requestBody": {
+          "description": "Optional description in *Markdown*",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/englishSummary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -115,6 +144,28 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          }
+        }
+      },
+      "english": {
+        "type": "object",
+        "properties": {
+          "word": {
+            "type": "string"
+          },
+          "example": {
+            "type": "string"
+          }
+        }
+      },
+      "englishSummary": {
+        "type": "object",
+        "properties": {
+          "words": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/english"
             }
           }
         }
