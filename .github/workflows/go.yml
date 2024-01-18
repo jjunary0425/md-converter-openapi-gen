@@ -37,10 +37,7 @@ jobs:
         
         git add .
         git commit -m "source generation"
-        git push
-      
-    - name: Tag version
-      run: |
+
         # Get the latest tag
         latestTag=$(git describe --tags --abbrev=0)
         
@@ -51,4 +48,5 @@ jobs:
         
         # Create and push the new tag
         git tag "$newTag"
-        git push origin "$newTag"
+
+        git push "$newTag"
