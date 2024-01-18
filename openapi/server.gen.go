@@ -9,6 +9,9 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Create a new english markdown
+	// (POST /english)
+	PostEnglishMarkdown(ctx echo.Context) error
 	// Create a new kanji markdown
 	// (POST /kanji)
 	PostKanjiMarkdown(ctx echo.Context) error
@@ -17,6 +20,15 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// PostEnglishMarkdown converts echo context to params.
+func (w *ServerInterfaceWrapper) PostEnglishMarkdown(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.PostEnglishMarkdown(ctx)
+	return err
 }
 
 // PostKanjiMarkdown converts echo context to params.
@@ -56,6 +68,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.POST(baseURL+"/english", wrapper.PostEnglishMarkdown)
 	router.POST(baseURL+"/kanji", wrapper.PostKanjiMarkdown)
 
 }
