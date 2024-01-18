@@ -23,20 +23,12 @@ jobs:
 
     - name: install oapi-codegen
       run: go install github.com/deepmap/oapi-codegen/v2/cmd/oapi-codegen@latest
-
-    - name: crete folder
-      run: mkdir openapi
       
     - name: create types
       run: oapi-codegen -generate "types" -package openapi output/openapi.json > openapi/type.gen.go
 
     - name: create servers
       run:  oapi-codegen -generate "server" -package openapi output/openapi.json > openapi/server.gen.go
-
-    - name: init
-      run: |
-        cd openapi
-        go mod init github.com/${GITHUB_REPOSITORY}/openapi
 
     - name: Commit and Push Changes
       run: |
@@ -47,3 +39,16 @@ jobs:
         git commit -m "source generation"
         git push
       
+    - name: Tag version
+      run: |
+        # Get the latest tag
+        latestTag=$(git describe --tags --abbrev=0)
+        
+        # Extract the version number and increment
+        IFS='.' read -r -a version <<< "$latestTag"
+        ((version[2]++))
+        newTag="${version[0]}.${version[1]}.${version[2]}"
+        
+        # Create and push the new tag
+        git tag "$newTag"
+        git push origin "$newTag"
